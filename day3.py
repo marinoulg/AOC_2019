@@ -86,12 +86,6 @@ def part1(input):
     tmp1, tmp2 = comparing_dict_keys(mydict1,mydict2)
     mydict1,mydict2 = deleting_useless_keys(mydict1,mydict2,tmp1,tmp2)
 
-    # print(instr1)
-    # print(stock1)
-    # print()
-    # print(instr2)
-    # print(stock2)
-
     similar_coordinates = []
     for key in mydict1.keys():
         for elem1 in (mydict1[key]):
@@ -105,7 +99,6 @@ def part1(input):
 
     return stock1, stock2,distances
 
-print()
 stock1, stock2,distances = (part1(input))
 print("Answer part 1:", sorted(list(distances.keys()))[0])
 print()
@@ -118,8 +111,11 @@ def counting_iterations_to_get_to_cross(stock, coordinate):
         else: break
     return it
 
-steps = []
-for elem in (list(distances.values())):
-    steps.append(counting_iterations_to_get_to_cross(stock1,elem)+counting_iterations_to_get_to_cross(stock2,elem))
+def part2(input):
+    steps = []
+    for elem in (list(distances.values())):
+        steps.append(counting_iterations_to_get_to_cross(stock1,elem)+counting_iterations_to_get_to_cross(stock2,elem))
 
-print(sorted(steps)[0])
+    return (sorted(steps)[0])
+
+print("Answer part 2:", part2(input))
