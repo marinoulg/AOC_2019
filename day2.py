@@ -30,6 +30,7 @@ ex2 = input[1].split(",")
 ex3 = input[2].split(",")
 ex4 = input[3].split(",")
 ex5 = input[4].split(",")
+ex6 = input[5].split(",")
 
 # print(ex1)
 def getstarted(ex1):
@@ -37,9 +38,6 @@ def getstarted(ex1):
     for elem in ex1:
         elem = int(elem)
         integers.append(elem)
-
-    print("List to deal with", integers)
-    print("------")
     return integers
 
 def update_by4_list(integers):
@@ -54,83 +52,87 @@ def update_by4_list(integers):
             by_4_list.append(tmp[0])
     by_4_list.append(integers[old_pos:])
     by_4_list.pop(0)
+    # print(by_4_list)
     return by_4_list
 
 
-
-def opcode1(integers, by_4_list):
-    # print("List by Opcode", by_4_list)
-    # print("------")
-
-    for elem in by_4_list:
-        opcode = (elem[0])
-        if opcode == 1:
-            # addition
-            pos1, pos2, pos3 = elem[1], elem[2], elem[3]
-            res = integers[pos1] + integers[pos2]
-            integers.pop(pos3)
-            integers.insert(pos3,res)
-    return integers
-
-def opcode2(integers, by_4_list):
-    for elem in by_4_list:
-        opcode = (elem[0])
-        # print("poc2", opcode)
-        if opcode == 2:
-            # multiplication
-            pos1, pos2, pos3 = elem[1], elem[2], elem[3]
-            res = integers[pos1] * integers[pos2]
-            integers.pop(pos3)
-            integers.insert(pos3,res)
-    return integers
-
-def opcode99(integers, by_4_list):
-    for elem in by_4_list:
-        opcode = (elem[0])
-        if opcode == 99:
-            # program is finished and should immediately halt
-            break
-
-        # else:
-        #     # Encountering an unknown opcode means something went wrong.
-        #     print("Error in opcode")
-        # print(integers)
-
-def part1(ex1):
+def getpart1(ex1):
     integers = getstarted(ex1)
     print(integers)
     by_4_list = update_by4_list(integers)
+    print(by_4_list)
 
-    ints = integers.copy()
-    while ints != None :
-        # print("opcode1")
-        integers = opcode1(integers, by_4_list)
-        by_4_list = update_by4_list(integers)
-        # print(integers)
+    for l in range(len(by_4_list)):
+        print()
+        for elem in by_4_list[l:]:
+            print(by_4_list[l:])
+            opcode = (elem[0])
+            if opcode == 1:
+                print("opcode", opcode)
+                pos1, pos2, pos3 = elem[1], elem[2], elem[3]
+                res = integers[pos1] + integers[pos2]
+                integers.pop(pos3)
+                integers.insert(pos3,res)
+                # print(integers)
+                print("first:", integers[0])
+                by_4_list = update_by4_list(integers)
+                break
+            if opcode == 2:
+                    # multiplication
+                    print("opcode", opcode)
+                    pos1, pos2, pos3 = elem[1], elem[2], elem[3]
+                    res = integers[pos1] * integers[pos2]
+                    integers.pop(pos3)
+                    integers.insert(pos3,res)
+                    # print(integers)
+                    print("first:", integers[0])
+                    by_4_list = update_by4_list(integers)
+                    break
+            if opcode == 99:
+                # print(integers)
+                print("first:", integers[0])
+                by_4_list = update_by4_list(integers)
+                break
+            else:
+                print("Error")
+                break
+    return(integers)
 
-        # print("opcode2")
-        integers = opcode2(integers, by_4_list)
-        by_4_list = update_by4_list(integers)
-        # print(integers)
-
-        # print("opcode3")
-        ints = opcode99(integers, by_4_list)
-        # print(ints)
-
-    return (integers[0])
 
 print("...........")
 print()
-print("Ex1", part1(ex1))
+print("Ex1", getpart1(ex1))
 print("...........")
 print()
-print("Ex2",part1(ex2))
+print("Ex2",getpart1(ex2))
 print("...........")
 print()
-print("Ex3",part1(ex3))
+print("Ex3",getpart1(ex3))
 print("...........")
 print()
-print("Ex4",part1(ex4))
+print("Ex4",getpart1(ex4))
 print("...........")
 print()
-print("Ex5",part1(ex5))
+print("Ex5",getpart1(ex5))
+print()
+print("Ex6",getpart1(ex6))
+
+print("----------------------------------------------------")
+# --------------------------
+
+
+# on real input
+input = open("day2.txt", "r").read().split(",")
+print()
+# To do this, before running the program,
+# replace position 1 with the value 12 and
+input.pop(1)
+input.insert(1,12)
+# replace position 2 with the value 2.
+input.pop(2)
+input.insert(2,2)
+# What value is left at position 0 after the program halts
+# print("List to deal with", integers)
+# print("------")
+
+print(getpart1(input))
