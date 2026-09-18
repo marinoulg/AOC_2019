@@ -76,10 +76,6 @@ def nb_of_orbits_1_letter_p2(initial_letter, mydict):
     # print("nb_of_orbits:", nb_of_orbits)
     return nb_of_orbits, orbits
 
-
-
-
-
 def crossover(mydict):
     nb_of_orbitsY, orbitsY = (nb_of_orbits_1_letter_p2("YOU", mydict))
     nb_of_orbitsS, orbitsS = (nb_of_orbits_1_letter_p2("SAN", mydict))
