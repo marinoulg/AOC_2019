@@ -1,4 +1,4 @@
-input_d8 = open("day_8/day8.txt", "r").read().strip()
+input_d8 = open("day_8/day8.txt", "r").read()[:-1]
 
 # example: given an image 3 pixels wide and 2 pixels tall
 # image = (3,2)
@@ -6,8 +6,9 @@ image = (25,6)
 
 # Images are sent as a series of digits that each represent the color of a
 # single pixel.
+# 0 is black, 1 is white, and 2 is transparent.
 
-def get_layers_in_2D(input_d8):
+def get_layers_in_2D(input_, image):
     # The digits fill each row of the image left-to-right,
     # then move downward to the next row,
     # filling rows top-to-bottom until every pixel of the image is filled.
@@ -20,11 +21,11 @@ def get_layers_in_2D(input_d8):
 
     layers_horiz = []
     tmp = []
-    for i in range(len(input_d8)):
+    for i in range(len(input_)):
         if i%image[0]==0:
             tmp = []
             for u in range(i, i+image[0]):
-                tmp.append(input_d8[u])
+                tmp.append(input_[u])
             layers_horiz.append(tmp)
 
     # print(layers_horiz)
@@ -43,9 +44,9 @@ def get_layers_in_2D(input_d8):
 def get_layer_in_1D(layer):
     return (("".join(str(layer)).replace("[","").replace("]","")).replace("'","")).split(", ")
 
-def all_1D_and_count_0_per_layer(input_d8):
+def all_1D_and_count_0_per_layer(input_d8, image):
     # create all layers in 1D & create a dict to count the number of 0 in each layer
-    layers = get_layers_in_2D(input_d8)
+    layers = get_layers_in_2D(input_d8, image)
     layers_image_1D = []
     count_layer = 0
     how_many_zeros = {}
@@ -100,10 +101,83 @@ def get_final_count(layers_image_1D, key):
     print("final answer:",final_count[1]*final_count[2])
     return (final_count)
 
-def part1(input_d8):
-    how_many_zeros, layers_image_1D = all_1D_and_count_0_per_layer(input_d8)
+def part1(input_d8, image):
+    how_many_zeros, layers_image_1D = all_1D_and_count_0_per_layer(input_d8, image)
     layers_image_1D, key = layer_fewest_0(how_many_zeros, layers_image_1D)
     # print("this is the layer", layers_image_1D[key])
     final_count = get_final_count(layers_image_1D, key)
     return final_count
-(part1(input_d8))
+# (part1(input_d8, image))
+
+# --------------- part 2 ---------------
+
+# Example :
+input_ex = open("day_8/ex2day8.txt", "r").read().strip()
+image_ex = (2,2)
+
+input_real = open("day_8/day8.txt", "r").read().strip()
+image = (25,6)
+
+# layers = get_layers_in_2D(input_ex, image_ex)
+layers = get_layers_in_2D(input_real, image)
+
+def get_coords_colors(image, layers):
+    final_layers_colors = {}
+    for coordy in range(image[1]):
+        for coordx in range(image[0]):
+            # print((coordx,coordy), end=": ")
+            for layer in (layers):
+                if (layer[coordy][coordx]) == "1":
+                    final_layers_colors[(coordx,coordy)] = 1
+                    # print(1)
+                    break
+                elif (layer[coordy][coordx]) == "0":
+                    final_layers_colors[(coordx,coordy)] = 0
+                    # print(0)
+                    break
+                elif (layer[coordy][coordx]) == "2":
+                    next
+    return (final_layers_colors)
+
+
+final_layers_colors = (get_coords_colors(image, layers))
+axis_0 = []
+axis_1 = []
+axis_2 = []
+axis_3 = []
+axis_4 = []
+axis_5 = []
+for x,y in final_layers_colors.keys():
+    if y == 0:
+        axis_0.append(final_layers_colors[(x,y)])
+    elif y == 1:
+        axis_1.append(final_layers_colors[(x,y)])
+    elif y == 2:
+            axis_2.append(final_layers_colors[(x,y)])
+    elif y == 3:
+            axis_3.append(final_layers_colors[(x,y)])
+    elif y == 4:
+            axis_4.append(final_layers_colors[(x,y)])
+    elif y == 5:
+            axis_5.append(final_layers_colors[(x,y)])
+
+print(axis_0)
+print(axis_1)
+print(axis_2)
+print(axis_3)
+print(axis_4)
+print(axis_5)
+
+# --------- Read the image ---------
+
+# Images are sent as a series of digits that each represent the color of a
+# single pixel.
+# 0 is black, 1 is white, and 2 is transparent.
+
+# open a new .txt file
+# copy/paste the result of the printed axes, while replacing:
+#       - "[" by ""
+#       - "]" by ""
+#       - "," by ""
+#       - "1" by "X"
+#       - "0" by " "
