@@ -1,7 +1,27 @@
-# It is a six-digit number. - in the range ☑
-
 # How many different passwords within the range given in your puzzle input meet these criteria?
 input = open("day4.txt", "r").read().split("\n")
+
+def for_first_num(number):
+    number = str(number)
+    actual_number = []
+
+    num_old = int(number[0])
+    actual_number.append(str(num_old))
+
+    for char in number[1:]:
+        num = int(char)
+        if num_old < num:
+            num_old = num
+            actual_number.append(str(num))
+            continue
+        else:
+            # print(num_old,num)
+            actual_number.append(str(num_old))
+            break
+
+    while len(actual_number) != 6:
+        actual_number.append(str(num_old))
+    return int("".join(actual_number))
 
 def get_possible_number(number):
     # Going from left to right, the digits never decrease;
@@ -27,7 +47,7 @@ def get_possible_number(number):
 def initialize(input):
     possibles = []
     mini, maxi = input[0].split("-")
-    actual_mini = (get_possible_number(int(mini)))
+    actual_mini = (for_first_num(int(mini)))
     actual_maxi = (get_possible_number(int(maxi)))
 
     possibles.append((actual_mini))
@@ -35,7 +55,6 @@ def initialize(input):
     return possibles, mini, maxi
 
 def rule_increase(possibles):
-    # Implementing the rule
     # Going from left to right, the digits never decrease; ☑
     # they only ever increase or stay the same (like 111123 or 135679). ☑
     print("\n‼️ Rule : Going from left to right, the digits never decrease; they only ever increase or stay the same (like 111123 or 135679).")
@@ -68,6 +87,7 @@ def testing_1_num(digit_same_possibles, number):
     return digit_same_possibles
 
 def rule_adjacent_numbers(possibles):
+    # Two adjacent digits are the same (like 22 in 122345).
     print("\n‼️ Rule : Two adjacent digits are the same")
     digit_same_possibles = []
     for i in range(len(possibles)):
@@ -115,7 +135,3 @@ def run_part1(input):
     return (len(digit_same_possibles))
 
 print(run_part1(input))
-
-
-# 908 : your answer is too high
-# 894 : your answer is too low
