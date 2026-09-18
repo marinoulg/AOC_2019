@@ -24,7 +24,7 @@
 # Once you're done processing an opcode, move to the next one by stepping forward 4 positions.
 
 
-input = open("exday2.txt", "r").read().split("\n")
+input = open("day_2/exday2.txt", "r").read().split("\n")
 ex1 = input[0].split(",")
 ex2 = input[1].split(",")
 ex3 = input[2].split(",")
@@ -122,7 +122,7 @@ print("----------------------------------------------------")
 
 
 # on real input
-input = open("day2.txt", "r").read().split(",")
+input = open("day_2/day2.txt", "r").read().split(",")
 print()
 # To do this, before running the program,
 # replace position 1 with the value 12 and
