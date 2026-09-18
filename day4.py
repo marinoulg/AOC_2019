@@ -94,6 +94,7 @@ def rule_adjacent_numbers(possibles):
         number = possibles[i]
         digit_same_possibles = testing_1_num(digit_same_possibles, number)
     print("Corrected ✅✅✅")
+    print(len(digit_same_possibles))
     return digit_same_possibles
 
 def within_range(digit_same_possibles,mini, maxi):
@@ -134,4 +135,65 @@ def run_part1(input):
     print('\n---- waiting for answer ----')
     return (len(digit_same_possibles))
 
-print(run_part1(input))
+# print(run_part1(input))
+
+# Part 2
+
+def testing_1_num_part2(number):
+    it = {}
+    # the two adjacent matching digits are not part of a larger group of matching digits.
+    old_char = (str(number)[0])
+    for char in (str(number)[1:]):
+        if (old_char == char):
+            if char not in it:
+                it[char] = int()
+                it[char] += 2
+            else: it[char] += 1
+        else:
+            old_char = char
+
+    for value in list(it.values()):
+        if value == 2:
+            return True
+    else:
+        return False
+
+# print(testing_1_num_part2(111122))
+
+
+def rule_adjacent_numbers_p2(possibles, digit_same_possibles):
+    # Two adjacent digits are the same (like 22 in 122345).
+    print("\n‼️ Rule : The two adjacent matching digits are not part of a larger group of matching digits.")
+    for number in possibles:
+        if testing_1_num_part2(number) == True:
+            digit_same_possibles.append(number)
+            # print("Adding", number)
+        else:
+            next
+    print("Numbers corrected ✅✅✅")
+    print(len(possibles), 'vs', len(digit_same_possibles))
+    return digit_same_possibles
+
+def run_part2(input):
+    possibles, mini, maxi = initialize(input)
+
+    # Going from left to right, the digits never decrease;
+    # they only ever increase or stay the same (like 111123 or 135679).
+    possibles = rule_increase(possibles)
+
+    # Two adjacent digits are the same (like 22 in 122345).
+    digit_same_possibles = []
+    digit_same_possibles = rule_adjacent_numbers_p2(possibles, digit_same_possibles)
+
+    # The value is within the range given in your puzzle input.
+    digit_same_possibles = within_range(digit_same_possibles,mini, maxi)
+
+    # It is a six-digit number.
+    print("\n‼️ Rule: It is a six-digit number.")
+    print(f"Number mini in range : {digit_same_possibles[0]}, {len(str(digit_same_possibles[0]))} digits")
+    print(f"Number maxi in range : {digit_same_possibles[-1]}, {len(str(digit_same_possibles[-1]))} digits")
+    print("Verified ✅✅✅")
+
+    print('\n---- waiting for answer ----')
+    return (len(digit_same_possibles))
+print(run_part2(input))
