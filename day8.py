@@ -1,12 +1,8 @@
-input_d8 = open("day_8/day8.txt", "r").read()[:-1]
+input_real = open("day_8/day8.txt", "r").read()[:-1]
 
 # example: given an image 3 pixels wide and 2 pixels tall
-# image = (3,2)
+# image_ex = (3,2)
 image = (25,6)
-
-# Images are sent as a series of digits that each represent the color of a
-# single pixel.
-# 0 is black, 1 is white, and 2 is transparent.
 
 def get_layers_in_2D(input_, image):
     # The digits fill each row of the image left-to-right,
@@ -107,7 +103,7 @@ def part1(input_d8, image):
     # print("this is the layer", layers_image_1D[key])
     final_count = get_final_count(layers_image_1D, key)
     return final_count
-# (part1(input_d8, image))
+(part1(input_real, image))
 
 # --------------- part 2 ---------------
 
@@ -115,9 +111,6 @@ def part1(input_d8, image):
 # input_ex = open("day_8/ex2day8.txt", "r").read().strip()
 # image_ex = (2,2)
 # layers_ex = get_layers_in_2D(input_ex, image_ex)
-
-input_real = open("day_8/day8.txt", "r").read().strip()
-image = (25,6)
 
 def get_coords_colors(image, layers):
     final_layers_colors = {}
@@ -153,6 +146,9 @@ def part2(input_real, image):
     for how_tall_pixel_img in range(image[1]):
         all_axes = final_image(all_axes, final_layers_colors, how_tall_pixel_img)
 
+    # Images are sent as a series of digits that each represent the color of a
+    # single pixel.
+    # 0 is black, 1 is white, and 2 is transparent.
     print(all_axes.replace("[","").replace("]","").replace(",","").replace("1","X").replace("0"," "))
 
 part2(input_real, image)
