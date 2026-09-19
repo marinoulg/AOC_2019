@@ -112,14 +112,12 @@ def part1(input_d8, image):
 # --------------- part 2 ---------------
 
 # Example :
-input_ex = open("day_8/ex2day8.txt", "r").read().strip()
-image_ex = (2,2)
+# input_ex = open("day_8/ex2day8.txt", "r").read().strip()
+# image_ex = (2,2)
+# layers_ex = get_layers_in_2D(input_ex, image_ex)
 
 input_real = open("day_8/day8.txt", "r").read().strip()
 image = (25,6)
-
-# layers = get_layers_in_2D(input_ex, image_ex)
-layers = get_layers_in_2D(input_real, image)
 
 def get_coords_colors(image, layers):
     final_layers_colors = {}
@@ -139,45 +137,22 @@ def get_coords_colors(image, layers):
                     next
     return (final_layers_colors)
 
+def final_image(all_axes, final_layers_colors, how_tall_pixel_img):
+    axis_0 = []
+    for x,y in final_layers_colors.keys():
+        if y == how_tall_pixel_img:
+            axis_0.append(final_layers_colors[(x,y)])
+    all_axes+= "\n"+str(axis_0)
+    return all_axes
 
-final_layers_colors = (get_coords_colors(image, layers))
-axis_0 = []
-axis_1 = []
-axis_2 = []
-axis_3 = []
-axis_4 = []
-axis_5 = []
-for x,y in final_layers_colors.keys():
-    if y == 0:
-        axis_0.append(final_layers_colors[(x,y)])
-    elif y == 1:
-        axis_1.append(final_layers_colors[(x,y)])
-    elif y == 2:
-            axis_2.append(final_layers_colors[(x,y)])
-    elif y == 3:
-            axis_3.append(final_layers_colors[(x,y)])
-    elif y == 4:
-            axis_4.append(final_layers_colors[(x,y)])
-    elif y == 5:
-            axis_5.append(final_layers_colors[(x,y)])
+def part2(input_real, image):
+    layers = get_layers_in_2D(input_real, image)
+    final_layers_colors = (get_coords_colors(image, layers))
 
-print(axis_0)
-print(axis_1)
-print(axis_2)
-print(axis_3)
-print(axis_4)
-print(axis_5)
+    all_axes = str()
+    for how_tall_pixel_img in range(image[1]):
+        all_axes = final_image(all_axes, final_layers_colors, how_tall_pixel_img)
 
-# --------- Read the image ---------
+    print(all_axes.replace("[","").replace("]","").replace(",","").replace("1","X").replace("0"," "))
 
-# Images are sent as a series of digits that each represent the color of a
-# single pixel.
-# 0 is black, 1 is white, and 2 is transparent.
-
-# open a new .txt file
-# copy/paste the result of the printed axes, while replacing:
-#       - "[" by ""
-#       - "]" by ""
-#       - "," by ""
-#       - "1" by "X"
-#       - "0" by " "
+part2(input_real, image)
