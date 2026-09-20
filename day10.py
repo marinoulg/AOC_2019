@@ -13,10 +13,7 @@ def initialize(input_ex):
         grid.append(tmp)
         visual_grid += "\n" + str(tmp)
 
-    # print((grid))
     print(visual_grid.replace(",","").replace("[","").replace("]","").replace("'",""))
-    # print()
-    # print(coordinates)
     print()
     return coordinates
 
@@ -29,7 +26,6 @@ def get_asteroid_coords(coordinates):
 
     print("asteroid_coords:",sorted(asteroid_coords), end='\n\n')
     return asteroid_coords
-
 
 def max_size_grid(coordinates):
     max_x_grid = 0
@@ -52,24 +48,6 @@ def max_size_grid(coordinates):
 
     print()
     return (max_x_grid, max_y_grid), (min_x_grid, min_y_grid)
-
-# def test_for_1_set_of_asteroid_coords(coords_tested, asteroid_coords):
-#     x_basis, y_basis = coords_tested
-#     asteroid_coords.remove((x_basis,y_basis))
-#     # return asteroid_coords
-#     line_of_sight_tmp = []
-#     for elem in asteroid_coords:
-#         x,y = elem
-#         line_of_sight_tmp.append(((x- x_basis), (y- y_basis)))
-#         # print("total change needed:", ((x - x_basis), (y - y_basis)), end="\n")
-
-#     line_of_sight_tmp = list(set(line_of_sight_tmp))
-#     print("Potential line_of_sight_tmp:", sorted(line_of_sight_tmp))
-#     print("length of line_of_sight_tmp:", len(line_of_sight_tmp))
-
-#     # éliminer ceux qui ne sont en faut pas visibles
-#     # print("\nThose that cannot be seen are : \n - (4,4), bc in same line as from O to (2,2); \n - (4,3), bc in same line as from O to (3,2)\n")
-#     return asteroid_coords, line_of_sight_tmp
 
 def create_ligne_droite(new_coord_test, coords_tested,
                         max_x_grid, max_y_grid,
@@ -214,31 +192,10 @@ def create_ligne_droite(new_coord_test, coords_tested,
         not_possible = ligne_droite[1:]
 
     # print(ligne_droite)
-
-    possible = sorted(ligne_droite)[0]
-
-    # for elem in (ligne_droite):
-    #         if elem not in asteroid_coords:
-    #             ligne_droite.remove(elem)
+    possible = (ligne_droite)[0]
 
 
     return possible, not_possible
-
-
-
-
-
-
-
-
-
-coordinates = initialize(input_ex)
-asteroid_coords= get_asteroid_coords(coordinates)
-
-starting_point = (4,0)
-nb_of_ast_possible_to_detect = 0
-asteroid_coords.remove(starting_point)
-(max_x_grid, max_y_grid), (min_x_grid, min_y_grid) = max_size_grid(coordinates)
 
 def test_for_1_set_of_asteroid_coords(starting_point, new_coord_test,
                                   max_x_grid, max_y_grid,
@@ -251,17 +208,27 @@ def test_for_1_set_of_asteroid_coords(starting_point, new_coord_test,
                                         asteroid_coords=asteroid_coords)
     return ligne_droite
 
-    print("------------------------")
+    # print("------------------------")
 
-    nb_of_ast_possible_to_detect = 0
-    if ligne_droite != []:
-        nb_of_ast_possible_to_detect += 1
-        print(f'Between the monitoring station at {starting_point} and the asteroid {new_coord_test}, the only asteroids that are visible are {ligne_droite[0]}.')
+    # nb_of_ast_possible_to_detect = 0
+    # if ligne_droite != []:
+    #     nb_of_ast_possible_to_detect += 1
+    #     print(f'Between the monitoring station at {starting_point} and the asteroid {new_coord_test}, the only asteroids that are visible are {ligne_droite[0]}.')
 
-    print(f"At the monitoring station at {starting_point}, we detect {nb_of_ast_possible_to_detect} asteroid{"s" if nb_of_ast_possible_to_detect > 1 else ""} in direct line of sight.")
-    print()
-    return nb_of_ast_possible_to_detect
+    # print(f"At the monitoring station at {starting_point}, we detect {nb_of_ast_possible_to_detect} asteroid{"s" if nb_of_ast_possible_to_detect > 1 else ""} in direct line of sight.")
+    # print()
+    # return nb_of_ast_possible_to_detect
 
+coordinates = initialize(input_ex)
+asteroid_coords= get_asteroid_coords(coordinates)
+
+starting_point = (4,2)
+
+nb_of_ast_possible_to_detect = 0
+asteroid_coords.remove(starting_point)
+(max_x_grid, max_y_grid), (min_x_grid, min_y_grid) = max_size_grid(coordinates)
+
+# ------------ tester un exemple ------------
 # possible, not_possible = test_for_1_set_of_asteroid_coords(starting_point,
 #                                                                (2,2),
 #                                                                 max_x_grid, max_y_grid,
@@ -269,6 +236,7 @@ def test_for_1_set_of_asteroid_coords(starting_point, new_coord_test,
 #                                                                 asteroid_coords)
 # print("possible:", possible)
 # print("not_possible:",not_possible)
+# ------------- fin exemple ---------------
 
 print(f'Testing for monitoring station at {starting_point}:')
 possibles_tmp = []
@@ -302,3 +270,20 @@ for elem in not_possibles:
 possibles = sorted(list(set(possibles)))
 print("possibles:", possibles)
 print("Length possibles:",len(possibles))
+
+
+# Comprendre pour mieux corriger
+
+# 1. ça fonctionne pour (1,0) ✅
+# 2. ça ne fonctionne pour (1,2) ❌ car :
+#           ça ne cache pas tous les asteroids sur la même ligne  en y=2
+#           ça inclue dans les possibles (-2,1) --> négatif, donc ici n'existe pas
+# 3. ça ne fonctionne pour (3,4) ❌, car je trouve:
+        # not_possibles: [(2, 2), (4, 3)]
+        # possibles: [(0, 2), (1, 0), (1, 2), (1, 6), (3, 2), (4, 0), (4, 2), (4, 4)]
+    # (2, 2) est bien visible : C'est l'astéroïde le plus proche dans sa direction, c'est même lui qui fait écran. Il doit donc être dans les possibles.
+    # # (4, 3) est bien visible : Il est juste collé à la station en diagonale (dx=1, dy=-1), rien ne le bloque. Il doit aussi être dans les possibles.
+    # L'intrus à la place, c'est (1, 0) : C'est lui qui est caché derrière (2, 2) et qui ne devrait pas être possible (il doit aller dans not_possibles).
+# 4. ça ne fonctionne pour (4,2) ❌, car je trouve:
+        # not_possibles: [(4, 3), (4, 4), (5, 0), (7, 4)]
+        # possibles: [(0, 2), (1, 0), (1, 2), (2, 2), (3, 2), (3, 4), (4, 0)]
