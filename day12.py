@@ -27,12 +27,18 @@ def create_dict_of_moons(input_ex):
 
     return (my_dict)
 
-def initialize_new_step(my_dict):
-        for elem in my_dict:
-            my_dict[elem].append({"position":(0,0,0), "velocity":(0,0,0)})
-        return my_dict
+def initialize_first_step(my_dict):
+    for elem in my_dict:
+        my_dict[elem].append({"position":(0,0,0), "velocity":(0,0,0)})
+    return my_dict
 
-def tmp_velocities_2_moons(moon1_str:str,
+def initialize_new_step(my_dict, current_step):
+    for elem in my_dict:
+        my_dict[elem].append(my_dict[elem][current_step].copy())
+    return my_dict
+
+def tmp_velocities_2_moons_v2(my_dict,
+                              moon1_str:str,
                            moon2_str:str,
                            current_step:int):
 
@@ -41,8 +47,67 @@ def tmp_velocities_2_moons(moon1_str:str,
     # smallest one + 1
     # biggest one - 1
 
+    tmp_moon1, tmp_moon2 = [],[]
+    # print("tmp_moon1 is for", moon2_str)
     moon1 = (my_dict[moon1_str])
     moon2 = (my_dict[moon2_str])
+
+    if moon1_str != moon2_str:
+        x,y,z = (moon1[current_step]["position"])
+        x_comparing, y_comparing, z_comparing = (moon2[current_step]["position"])
+        # print()
+        if x < x_comparing:
+            # print(f"{x} - {moon1_str} < {x_comparing} - {moon2_str} donc tmp_moon2.append(-1)")
+            tmp_moon1.append(1)
+            tmp_moon2.append(-1)
+        elif x > x_comparing:
+            # print(f"{x} > {x_comparing} donc tmp_moon2.append(1)")
+            tmp_moon1.append(-1)
+            tmp_moon2.append(1)
+        else:
+            tmp_moon1.append(0)
+            tmp_moon2.append(0)
+
+        if y < y_comparing:
+            # print(f"{y} < {y_comparing} donc tmp_moon2.append(-1)")
+            tmp_moon1.append(1)
+            tmp_moon2.append(-1)
+        elif y > y_comparing:
+            # print(f"{y} < {y_comparing} donc tmp_moon2.append(1)")
+            tmp_moon1.append(-1)
+            tmp_moon2.append(1)
+        else:
+            tmp_moon1.append(0)
+            tmp_moon2.append(0)
+
+        if z < z_comparing:
+            # print(f"{z} < {z_comparing} donc tmp_moon2.append(-1)")
+            tmp_moon1.append(1)
+            tmp_moon2.append(-1)
+        elif z > z_comparing:
+            # print(f"{z} < {z_comparing} donc tmp_moon2.append(1)")
+            tmp_moon1.append(-1)
+            tmp_moon2.append(1)
+        else:
+            tmp_moon1.append(0)
+            tmp_moon2.append(0)
+    # print()
+
+    return tmp_moon1, tmp_moon2
+
+def tmp_velocities_2_moons_v1(moon1_str:str,
+                           moon2_str:str,
+                           current_step:int):
+
+    # update temporary velocities between 2 moons
+
+    # smallest one + 1
+    # biggest one - 1
+
+    # tmp_moon1, tmp_moon2 = [],[]
+    moon1 = (my_dict[moon1_str])
+    moon2 = (my_dict[moon2_str])
+
 
     iteration = 0
     l_moon1 = list(moon1[current_step]["velocity"])
@@ -51,8 +116,8 @@ def tmp_velocities_2_moons(moon1_str:str,
     # problem is here
     # bc it compares everything together
     for coord_moon1, coord_moon2 in zip(moon1[current_step]["position"], moon2[current_step]["position"]):
-        print("iteration:",iteration)
-        print("comparing:", coord_moon1, coord_moon2)
+        # print("iteration:",iteration)
+        # print("comparing:", coord_moon1, coord_moon2)
         if coord_moon1 > coord_moon2:
             tmp_moon1 = l_moon1[iteration]
             # print(l_moon1)
@@ -76,7 +141,7 @@ def tmp_velocities_2_moons(moon1_str:str,
             l_moon2.pop(iteration+1)
             # print(l_moon1)
             # break
-        print()
+        # print()
 
 
         iteration+=1
@@ -86,14 +151,15 @@ def tmp_velocities_2_moons(moon1_str:str,
     tmp_velocity_moon1 = tuple(l_moon1)
     tmp_velocity_moon2 = tuple(l_moon2)
 
-    print(moon1_str,":", tmp_velocity_moon1)
-    print(moon2_str,":", tmp_velocity_moon2)
-    print()
+    # print(moon1_str,":", tmp_velocity_moon1)
+    # print(moon2_str,":", tmp_velocity_moon2)
+    # print()
 
 
     return tmp_velocity_moon1, tmp_velocity_moon2
 
-def comparing_1_moon_to_others_for_future_velocity(moon_comparing,
+def comparing_1_moon_to_others_for_future_velocity(my_dict,
+                                                   moon_comparing,
                                                    moon_compared,
                                                    current_step,
                                                    temporary_velocities):
@@ -103,7 +169,7 @@ def comparing_1_moon_to_others_for_future_velocity(moon_comparing,
             temporary_velocities[elem] = []
         if elem != moon_comparing and elem not in moon_compared:
             # print(f"{elem} being compared to {moon_comparing}")
-            tmp_velocity_moon1, tmp_velocity_moon2 = tmp_velocities_2_moons(moon_comparing, elem, current_step)
+            tmp_velocity_moon1, tmp_velocity_moon2 = tmp_velocities_2_moons_v2(my_dict, moon_comparing, elem, current_step)
             # print(f"tmp_velocities_2_moons of Io is: {tmp_velocity_moon1}")
             temporary_velocities[moon_comparing].append(tmp_velocity_moon1)
             temporary_velocities[elem].append(tmp_velocity_moon2)
@@ -128,27 +194,37 @@ def apply_gravity(my_dict,
     # However, if the positions on a given axis are the same,
     # the velocity on that axis does not change for that pair of moons.
 
-    my_dict = initialize_new_step(my_dict)
-    print(f"---------- Current step is {current_step} ----------")
+    if current_step == 0:
+        my_dict = initialize_first_step(my_dict)
+    else:
+        # TO COMPLETE
+        my_dict = initialize_new_step(my_dict, current_step)
+    # my_dict = initialize_first_step(my_dict)
+
+    print(f"\n---------- Current step is {current_step} ----------")
 
     temporary_velocities = {}
     moon_compared = []
 
     for moon in my_dict:
         moon_compared.append(moon)
-        temporary_velocities, moon_compared = comparing_1_moon_to_others_for_future_velocity(moon,
+        temporary_velocities, moon_compared = comparing_1_moon_to_others_for_future_velocity(my_dict,
+                                                                                             moon,
                                                                                              moon_compared,
                                                                                              current_step,
                                                                                              temporary_velocities)
-    for elem in temporary_velocities:
-        # print(elem)
-        first_comp = temporary_velocities[elem][0]
-        secd_comp = temporary_velocities[elem][1]
-        third_comp = temporary_velocities[elem][2]
-        actual_velocities = ((first_comp[0]+secd_comp[0]+third_comp[0], first_comp[1]+secd_comp[1]+third_comp[1], first_comp[2]+secd_comp[2]+third_comp[2]))
-        my_dict[elem][current_step+1]["velocity"] = actual_velocities
+    # pprint(temporary_velocities)
+    # print()
+    # for elem in temporary_velocities:
+    #     # print(elem)
+    #     first_comp = temporary_velocities[elem][0]
+    #     secd_comp = temporary_velocities[elem][1]
+    #     third_comp = temporary_velocities[elem][2]
+    #     actual_velocities = ((first_comp[0]+secd_comp[0]+third_comp[0], first_comp[1]+secd_comp[1]+third_comp[1], first_comp[2]+secd_comp[2]+third_comp[2]))
+    #     my_dict[elem][current_step+1]["velocity"] = actual_velocities
 
-    return my_dict
+
+    return temporary_velocities
 
 def apply_velocity_aka_change_positions_nextstep(my_dict, current_step):
     # STEP 2: once all moons' velocities have been updated,
@@ -160,7 +236,7 @@ def apply_velocity_aka_change_positions_nextstep(my_dict, current_step):
     # then its new position would be x=-1, y=2, z=6.
     # This process does not modify the velocity of any moon.
 
-    my_dict = apply_gravity(my_dict, current_step)
+    # my_dict = apply_gravity(my_dict, current_step)
 
     for elem in my_dict:
         # print(elem)
@@ -173,15 +249,85 @@ def apply_velocity_aka_change_positions_nextstep(my_dict, current_step):
 
     return(my_dict)
 
-my_dict = create_dict_of_moons(input_ex)
+
+
+def initialize(input_ex):
+    my_dict = create_dict_of_moons(input_ex)
+    pprint(my_dict)
+
+    current_step=0
+    temporary_velocities = apply_gravity(my_dict,
+                                        current_step)
+
+    for elem in temporary_velocities:
+        # print(elem)
+        first_comp = temporary_velocities[elem][0]
+        secd_comp = temporary_velocities[elem][1]
+        third_comp = temporary_velocities[elem][2]
+        actual_velocities = ((first_comp[0]+secd_comp[0]+third_comp[0], first_comp[1]+secd_comp[1]+third_comp[1], first_comp[2]+secd_comp[2]+third_comp[2]))
+        my_dict[elem][current_step+1]["velocity"] = actual_velocities
+
+    my_dict = apply_velocity_aka_change_positions_nextstep(my_dict, current_step)
+    return my_dict, current_step
+
+def next_step(my_dict,
+              current_step):
+    current_step += 1
+    temporary_velocities = apply_gravity(my_dict,
+                                        current_step)
+    # pprint(temporary_velocities)
+    # print()
+    # pprint(my_dict)
+    # print()
+    for elem in temporary_velocities:
+        first_comp = temporary_velocities[elem][0]
+        secd_comp = temporary_velocities[elem][1]
+        third_comp = temporary_velocities[elem][2]
+
+        actual_velocities = ((first_comp[0]+secd_comp[0]+third_comp[0], first_comp[1]+secd_comp[1]+third_comp[1], first_comp[2]+secd_comp[2]+third_comp[2]))
+        x,y,z = actual_velocities
+
+        # Change position at current_step+1
+        x_pos, y_pos, z_pos = (my_dict[elem][current_step]["position"])
+        x_change_velocity, y_change_velocity, z_change_velocity = (my_dict[elem][current_step]["velocity"])
+
+        # print(my_dict[elem][current_step+1]["position"])
+        # print(elem, (x+x_pos+x_change_velocity, y+y_pos+y_change_velocity, z+z_pos+z_change_velocity))
+        my_dict[elem][current_step+1]["position"] = (x+x_pos+x_change_velocity, y+y_pos+y_change_velocity, z+z_pos+z_change_velocity)
+
+
+        # Change velocity at current_step+1
+        # print(elem, (x+x_change_velocity, y+y_change_velocity, z+z_change_velocity))
+        my_dict[elem][current_step+1]["velocity"] = (x+x_change_velocity, y+y_change_velocity, z+z_change_velocity)
+        # print()
+
+    return(my_dict, current_step)
+
+# Io : <x=-1, y=0, z=2>
+# Europa : <x=2, y=-10, z=-7>
+# Ganymede : <x=4, y=-8, z=8>
+# Callisto : <x=3, y=5, z=-1>
+
+# After 1 step:
+# Io : pos=<x= 2, y=-1, z= 1>, vel=<x= 3, y=-1, z=-1>
+# Europa : pos=<x= 3, y=-7, z=-4>, vel=<x= 1, y= 3, z= 3>
+# Ganymede : pos=<x= 1, y=-7, z= 5>, vel=<x=-3, y= 1, z=-3>
+# Callisto : pos=<x= 2, y= 2, z= 0>, vel=<x=-1, y=-3, z= 1>
+my_dict, current_step = initialize(input_ex)
 pprint(my_dict)
 
-current_step=0
-my_dict = apply_velocity_aka_change_positions_nextstep(my_dict, current_step)
+# After 2 steps:
+# Io : pos=<x= 5, y=-3, z=-1>, vel=<x= 3, y=-2, z=-2>
+# Europa : pos=<x= 1, y=-2, z= 2>, vel=<x=-2, y= 5, z= 6>
+# Ganymede : pos=<x= 1, y=-4, z=-1>, vel=<x= 0, y= 3, z=-6>
+# Callisto : pos=<x= 1, y=-4, z= 2>, vel=<x=-1, y=-6, z= 2>
+my_dict, current_step = next_step(my_dict, current_step)
 pprint(my_dict)
 
-# Time progresses by one step once all of the positions are updated.
-current_step += 1
-
-my_dict = apply_velocity_aka_change_positions_nextstep(my_dict, current_step)
+# After 3 steps:
+# Io : pos=<x= 5, y=-6, z=-1>, vel=<x= 0, y=-3, z= 0>
+# Europa : pos=<x= 0, y= 0, z= 6>, vel=<x=-1, y= 2, z= 4>
+# Ganymede :pos=<x= 2, y= 1, z=-5>, vel=<x= 1, y= 5, z=-4>
+# Callisto : pos=<x= 1, y=-8, z= 2>, vel=<x= 0, y=-4, z= 0>
+my_dict, current_step = next_step(my_dict, current_step)
 pprint(my_dict)
