@@ -95,69 +95,6 @@ def tmp_velocities_2_moons_v2(my_dict,
 
     return tmp_moon1, tmp_moon2
 
-def tmp_velocities_2_moons_v1(moon1_str:str,
-                           moon2_str:str,
-                           current_step:int):
-
-    # update temporary velocities between 2 moons
-
-    # smallest one + 1
-    # biggest one - 1
-
-    # tmp_moon1, tmp_moon2 = [],[]
-    moon1 = (my_dict[moon1_str])
-    moon2 = (my_dict[moon2_str])
-
-
-    iteration = 0
-    l_moon1 = list(moon1[current_step]["velocity"])
-    l_moon2 = list(moon2[current_step]["velocity"])
-
-    # problem is here
-    # bc it compares everything together
-    for coord_moon1, coord_moon2 in zip(moon1[current_step]["position"], moon2[current_step]["position"]):
-        # print("iteration:",iteration)
-        # print("comparing:", coord_moon1, coord_moon2)
-        if coord_moon1 > coord_moon2:
-            tmp_moon1 = l_moon1[iteration]
-            # print(l_moon1)
-            l_moon1.insert(iteration, tmp_moon1-1)
-            l_moon1.pop(iteration+1)
-
-            tmp_moon2 = l_moon2[iteration]
-            l_moon2.insert(iteration, tmp_moon2+1)
-            l_moon2.pop(iteration+1)
-            # print(l_moon1)
-            # break
-
-        elif coord_moon1 < coord_moon2:
-            tmp_moon1 = l_moon1[iteration]
-            # print(l_moon1)
-            l_moon1.insert(iteration, tmp_moon1+1)
-            l_moon1.pop(iteration+1)
-
-            tmp_moon2 = l_moon2[iteration]
-            l_moon2.insert(iteration, tmp_moon2-1)
-            l_moon2.pop(iteration+1)
-            # print(l_moon1)
-            # break
-        # print()
-
-
-        iteration+=1
-        if iteration>1:
-            continue
-    # print(f"--- Temporary velocities for step {current_step+1} between {moon1_str} and {moon2_str} are ---")
-    tmp_velocity_moon1 = tuple(l_moon1)
-    tmp_velocity_moon2 = tuple(l_moon2)
-
-    # print(moon1_str,":", tmp_velocity_moon1)
-    # print(moon2_str,":", tmp_velocity_moon2)
-    # print()
-
-
-    return tmp_velocity_moon1, tmp_velocity_moon2
-
 def comparing_1_moon_to_others_for_future_velocity(my_dict,
                                                    moon_comparing,
                                                    moon_compared,
@@ -249,9 +186,7 @@ def apply_velocity_aka_change_positions_nextstep(my_dict, current_step):
 
     return(my_dict)
 
-
-
-def initialize(input_ex):
+def initialize_exercise(input_ex):
     my_dict = create_dict_of_moons(input_ex)
     pprint(my_dict)
 
@@ -313,7 +248,7 @@ def next_step(my_dict,
 # Europa : pos=<x= 3, y=-7, z=-4>, vel=<x= 1, y= 3, z= 3>
 # Ganymede : pos=<x= 1, y=-7, z= 5>, vel=<x=-3, y= 1, z=-3>
 # Callisto : pos=<x= 2, y= 2, z= 0>, vel=<x=-1, y=-3, z= 1>
-my_dict, current_step = initialize(input_ex)
+my_dict, current_step = initialize_exercise(input_ex)
 pprint(my_dict)
 
 # After 2 steps:
