@@ -2,39 +2,12 @@ from pprint import pprint
 input_ex = open("day_12/exday12.txt", "r").read().split("\n")[:-1]
 # print(input_ex)
 
-# Each moon has a 3-dimensional position (x, y, and z) and a 3-dimensional velocity.
-# the x, y, and z velocity of each moon starts at 0.
-# first update the velocity of every moon by applying gravity.
-# Then, once all moons' velocities have been updated, update the position of every moon by applying velocity.
-# Time progresses by one step once all of the positions are updated.
-
-def apply_velocity_aka_change_positions_nextstep(my_dict, current_step):
-
-    # Once all gravity has been applied, apply velocity:
-    # simply add the velocity of each moon to its own position.
-
-    # For example, if Europa has a position of x=1, y=2, z=3 and a velocity of x=-2, y=0,z=3,
-    # then its new position would be x=-1, y=2, z=6.
-    # This process does not modify the velocity of any moon.
-
-    my_dict = apply_gravity(my_dict, current_step)
-
-    for elem in my_dict:
-        # print(elem)
-        first_comp = (my_dict[elem][current_step]["position"])
-        secd_comp = (my_dict[elem][current_step+1]["velocity"])
-
-        new_pos = ((first_comp[0]+secd_comp[0],first_comp[1]+secd_comp[1],
-                    first_comp[2]+secd_comp[2]))
-        my_dict[elem][current_step+1]["position"] = new_pos
-
-    return(my_dict)
-
-
 def create_dict_of_moons(input_ex):
     # 4 moons: Io, Europa, Ganymede, Callisto
-    my_dict = {}
+    # Each moon has a 3-dimensional position (x, y, and z) and a 3-dimensional velocity.
+    # the x, y, and z velocity of each moon starts at 0.
 
+    my_dict = {}
     moons = ["Io", "Europa", "Ganymede", "Callisto"]
     for moon in moons:
         if moon not in my_dict:
@@ -59,10 +32,11 @@ def initialize_new_step(my_dict):
             my_dict[elem].append({"position":(0,0,0), "velocity":(0,0,0)})
         return my_dict
 
-# update temporary velocities between 2 moons
 def tmp_velocities_2_moons(moon1_str:str,
                            moon2_str:str,
                            current_step:int):
+
+    # update temporary velocities between 2 moons
 
     # smallest one + 1
     # biggest one - 1
@@ -138,6 +112,8 @@ def comparing_1_moon_to_others_for_future_velocity(moon_comparing,
 
 def apply_gravity(my_dict,
                    current_step):
+
+    # STEP 1: update the velocity of every moon by applying gravity.
     # GOAL: change velocities for next step
     # smallest one + 1
     # biggest one - 1
@@ -174,14 +150,38 @@ def apply_gravity(my_dict,
 
     return my_dict
 
+def apply_velocity_aka_change_positions_nextstep(my_dict, current_step):
+    # STEP 2: once all moons' velocities have been updated,
+    # update the position of every moon by applying velocity.
 
+    # simply add the velocity of each moon to its own position.
+
+    # For example, if Europa has a position of x=1, y=2, z=3 and a velocity of x=-2, y=0,z=3,
+    # then its new position would be x=-1, y=2, z=6.
+    # This process does not modify the velocity of any moon.
+
+    my_dict = apply_gravity(my_dict, current_step)
+
+    for elem in my_dict:
+        # print(elem)
+        first_comp = (my_dict[elem][current_step]["position"])
+        secd_comp = (my_dict[elem][current_step+1]["velocity"])
+
+        new_pos = ((first_comp[0]+secd_comp[0],first_comp[1]+secd_comp[1],
+                    first_comp[2]+secd_comp[2]))
+        my_dict[elem][current_step+1]["position"] = new_pos
+
+    return(my_dict)
 
 my_dict = create_dict_of_moons(input_ex)
-current_step=0
 pprint(my_dict)
 
+current_step=0
 my_dict = apply_velocity_aka_change_positions_nextstep(my_dict, current_step)
 pprint(my_dict)
 
-my_dict = apply_velocity_aka_change_positions_nextstep(my_dict, current_step+1)
+# Time progresses by one step once all of the positions are updated.
+current_step += 1
+
+my_dict = apply_velocity_aka_change_positions_nextstep(my_dict, current_step)
 pprint(my_dict)
