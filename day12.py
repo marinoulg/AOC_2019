@@ -1,5 +1,5 @@
 from pprint import pprint
-# print(input_ex)
+import pandas as pd
 
 def create_dict_of_moons(input_ex):
     # 4 moons: Io, Europa, Ganymede, Callisto
@@ -137,7 +137,7 @@ def apply_gravity(my_dict,
         my_dict = initialize_new_step(my_dict, current_step)
     # my_dict = initialize_first_step(my_dict)
 
-    print(f"\n---------- Current step is {current_step} ----------")
+    # print(f"---------- Current step is {current_step} ----------")
 
     temporary_velocities = {}
     moon_compared = []
@@ -213,6 +213,9 @@ def next_step(my_dict,
     # print()
     # pprint(my_dict)
     # print()
+
+    tmp_dict = {}
+    trues = []
     for elem in temporary_velocities:
         first_comp = temporary_velocities[elem][0]
         secd_comp = temporary_velocities[elem][1]
@@ -227,21 +230,41 @@ def next_step(my_dict,
 
         # print(my_dict[elem][current_step+1]["position"])
         # print(elem, (x+x_pos+x_change_velocity, y+y_pos+y_change_velocity, z+z_pos+z_change_velocity))
-        my_dict[elem][current_step+1]["position"] = (x+x_pos+x_change_velocity, y+y_pos+y_change_velocity, z+z_pos+z_change_velocity)
+        if elem not in tmp_dict: tmp_dict[elem] = {}
+        if "position" not in tmp_dict[elem]: tmp_dict[elem]["position"] = (x+x_pos+x_change_velocity, y+y_pos+y_change_velocity, z+z_pos+z_change_velocity)
+        if "velocity" not in tmp_dict[elem]: tmp_dict[elem]["velocity"] = (x+x_change_velocity, y+y_change_velocity, z+z_change_velocity)
 
+        # my_dict[elem][current_step+1]["position"] = (x+x_pos+x_change_velocity, y+y_pos+y_change_velocity, z+z_pos+z_change_velocity)
+        my_dict[elem][current_step+1]["position"] = tmp_dict[elem]["position"]
+        for from_original_dict in my_dict[elem]:
+            # print(tmp_dict[elem])
+            if tmp_dict[elem] == from_original_dict:
+                print(f"{True} for {elem} at {current_step} step")
+                trues.append(elem)
+                # break
+
+
+        if len(trues) > 2 :
+            print(trues)
+            return my_dict, current_step
 
         # Change velocity at current_step+1
         # print(elem, (x+x_change_velocity, y+y_change_velocity, z+z_change_velocity))
-        my_dict[elem][current_step+1]["velocity"] = (x+x_change_velocity, y+y_change_velocity, z+z_change_velocity)
+        # my_dict[elem][current_step+1]["velocity"] = (x+x_change_velocity, y+y_change_velocity, z+z_change_velocity)
         # print()
+        # print(tmp_dict)
+        my_dict[elem][current_step+1]["velocity"] = tmp_dict[elem]["velocity"]
 
     return(my_dict, current_step)
 
-def solving_part1(nb_of_steps, my_dict, current_step):
+def first_part_part1(nb_of_steps, my_dict, current_step):
     # nb_of_steps = 10
     for _ in range(nb_of_steps-1):
         my_dict, current_step = next_step(my_dict, current_step)
 
+    return my_dict, current_step
+
+def solving_part1(my_dict, current_step):
     # After 10 steps:
     # Io : pos=<x= 2, y= 1, z=-3>, vel=<x=-3, y=-2, z= 1>
     # Europa : pos=<x= 1, y=-8, z= 0>, vel=<x=-1, y= 1, z= 3>
@@ -279,42 +302,107 @@ def solving_part1(nb_of_steps, my_dict, current_step):
 # Ganymede : <x=4, y=-8, z=8>
 # Callisto : <x=3, y=5, z=-1>
 
-input_ex = open("day_12/exday12.txt", "r").read().split("\n")[:-1]
-my_dict, current_step = initialize_exercise(input_ex)
-pprint(my_dict)
+# input_ex = open("day_12/exday12.txt", "r").read().split("\n")[:-1]
+# my_dict, current_step = initialize_exercise(input_ex)
+# pprint(my_dict)
 
-total_sum_of_NRJ = solving_part1(10, my_dict, current_step)
-print(total_sum_of_NRJ)
+# # my_dict, current_step = first_part_part1(10, my_dict, current_step)
+# # total_sum_of_NRJ = solving_part1(my_dict, current_step)
+# # print(total_sum_of_NRJ)
+# my_dict, current_step = first_part_part1(2779, my_dict, current_step )
 
-print("NEXT EXAMPLE")
-# ----------------- Example 2 -----------------
-# Io : <x=-8, y=-10, z=0>
-# Europa : <x=5, y=5, z=10>
-# Ganymede : <x=2, y=-7, z=3>
-# Callisto : <x=9, y=-8, z=-3>
+# df = pd.DataFrame(my_dict["Io"])
+# print("Answer part2 is", df.value_counts().__len__()-1)
+
+# print("NEXT EXAMPLE")
+# # ----------------- Example 2 -----------------
+# # Io : <x=-8, y=-10, z=0>
+# # Europa : <x=5, y=5, z=10>
+# # Ganymede : <x=2, y=-7, z=3>
+# # Callisto : <x=9, y=-8, z=-3>
 
 input_ex2 = open("day_12/ex2day12.txt", "r").read().split("\n")[:-1]
 my_dict, current_step = initialize_exercise(input_ex2)
 pprint(my_dict)
+my_dict, current_step = first_part_part1(27790000000, my_dict, current_step )
 
-# After 100 steps:
-# Io : pos=<x=  8, y=-12, z= -9>, vel=<x= -7, y=  3, z=  0>
-# Europa : pos=<x= 13, y= 16, z= -3>, vel=<x=  3, y=-11, z= -5>
-# Ganymede : pos=<x=-29, y=-11, z= -1>, vel=<x= -3, y=  7, z=  4>
-# Callisto : pos=<x= 16, y=-13, z= 23>, vel=<x=  7, y=  1, z=  1>
+df = pd.DataFrame(my_dict["Io"])
+print("Answer part2 for example 2 is", df.value_counts().__len__()-1)
 
-total_sum_of_NRJ = solving_part1(100, my_dict, current_step)
-print(total_sum_of_NRJ)
+print("NEXT EXAMPLE")
 
-# ----------------- Real input -----------------
-# Io : <x=-15, y=1, z=4>
-# Europa : <x=1, y=-10, z=-8>
-# Ganymede : <x=-5, y=4, z=9>
-# Callisto : <x=4, y=6, z=-2>
+# # After 100 steps:
+# # Io : pos=<x=  8, y=-12, z= -9>, vel=<x= -7, y=  3, z=  0>
+# # Europa : pos=<x= 13, y= 16, z= -3>, vel=<x=  3, y=-11, z= -5>
+# # Ganymede : pos=<x=-29, y=-11, z= -1>, vel=<x= -3, y=  7, z=  4>
+# # Callisto : pos=<x= 16, y=-13, z= 23>, vel=<x=  7, y=  1, z=  1>
+
+# total_sum_of_NRJ = solving_part1(100, my_dict, current_step)
+# print(total_sum_of_NRJ)
+
+# # ----------------- Real input -----------------
+# # Io : <x=-15, y=1, z=4>
+# # Europa : <x=1, y=-10, z=-8>
+# # Ganymede : <x=-5, y=4, z=9>
+# # Callisto : <x=4, y=6, z=-2>
 
 input_real = open("day_12/day12.txt", "r").read().split("\n")[:-1]
+# input_ex2 = open("day_12/ex2day12.txt", "r").read().split("\n")[:-1]
 my_dict, current_step = initialize_exercise(input_real)
 pprint(my_dict)
+my_dict, current_step = first_part_part1(277900000000, my_dict, current_step )
 
-total_sum_of_NRJ = solving_part1(1000, my_dict, current_step)
-print(total_sum_of_NRJ)
+df = pd.DataFrame(my_dict["Io"])
+print("Answer part2 for input 2 is", df.value_counts().__len__()-1)
+
+
+# my_dict, current_step = initialize_exercise(input_real)
+# pprint(my_dict)
+
+# total_sum_of_NRJ = solving_part1(1000, my_dict, current_step)
+# print(total_sum_of_NRJ)
+
+# ----------------- PART 2 -----------------
+# current_step += 1
+# temporary_velocities = apply_gravity(my_dict,
+#                                     current_step)
+# pprint(temporary_velocities)
+# print()
+# pprint(my_dict)
+# print()
+
+# tmp_dict = {}
+
+# for elem in temporary_velocities:
+#     first_comp = temporary_velocities[elem][0]
+#     secd_comp = temporary_velocities[elem][1]
+#     third_comp = temporary_velocities[elem][2]
+
+#     actual_velocities = ((first_comp[0]+secd_comp[0]+third_comp[0], first_comp[1]+secd_comp[1]+third_comp[1], first_comp[2]+secd_comp[2]+third_comp[2]))
+#     x,y,z = actual_velocities
+
+#     # Change position at current_step+1
+#     x_pos, y_pos, z_pos = (my_dict[elem][current_step]["position"])
+#     x_change_velocity, y_change_velocity, z_change_velocity = (my_dict[elem][current_step]["velocity"])
+
+#     # print(my_dict[elem][current_step+1]["position"])
+#     # print(elem, (x+x_pos+x_change_velocity, y+y_pos+y_change_velocity, z+z_pos+z_change_velocity))
+#     if elem not in tmp_dict: tmp_dict[elem] = {}
+#     if "position" not in tmp_dict[elem]: tmp_dict[elem]["position"] = (x+x_pos+x_change_velocity, y+y_pos+y_change_velocity, z+z_pos+z_change_velocity)
+#     if "velocity" not in tmp_dict[elem]: tmp_dict[elem]["velocity"] = (x+x_change_velocity, y+y_change_velocity, z+z_change_velocity)
+
+#     # my_dict[elem][current_step+1]["position"] = (x+x_pos+x_change_velocity, y+y_pos+y_change_velocity, z+z_pos+z_change_velocity)
+#     my_dict[elem][current_step+1]["position"] = tmp_dict[elem]["position"]
+#     while tmp_dict[elem] not in my_dict[elem]:
+#         my_dict, current_step = next_step(my_dict, current_step)
+#         print("current_step:",current_step)
+
+# print(f"{True} for {elem} at {current_step} step")
+#     # Change velocity at current_step+1
+#     # print(elem, (x+x_change_velocity, y+y_change_velocity, z+z_change_velocity))
+#     # my_dict[elem][current_step+1]["velocity"] = (x+x_change_velocity, y+y_change_velocity, z+z_change_velocity)
+#     # print()
+#     # print(tmp_dict)
+#     # my_dict[elem][current_step+1]["velocity"] = tmp_dict[elem]["velocity"]
+
+# (my_dict, current_step)
