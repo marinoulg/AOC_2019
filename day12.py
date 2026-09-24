@@ -1,5 +1,4 @@
 from pprint import pprint
-input_ex = open("day_12/exday12.txt", "r").read().split("\n")[:-1]
 # print(input_ex)
 
 def create_dict_of_moons(input_ex):
@@ -238,19 +237,6 @@ def next_step(my_dict,
 
     return(my_dict, current_step)
 
-# Io : <x=-1, y=0, z=2>
-# Europa : <x=2, y=-10, z=-7>
-# Ganymede : <x=4, y=-8, z=8>
-# Callisto : <x=3, y=5, z=-1>
-
-# After 1 step:
-# Io : pos=<x= 2, y=-1, z= 1>, vel=<x= 3, y=-1, z=-1>
-# Europa : pos=<x= 3, y=-7, z=-4>, vel=<x= 1, y= 3, z= 3>
-# Ganymede : pos=<x= 1, y=-7, z= 5>, vel=<x=-3, y= 1, z=-3>
-# Callisto : pos=<x= 2, y= 2, z= 0>, vel=<x=-1, y=-3, z= 1>
-my_dict, current_step = initialize_exercise(input_ex)
-pprint(my_dict)
-
 def solving_part1(nb_of_steps, my_dict, current_step):
     # nb_of_steps = 10
     for _ in range(nb_of_steps-1):
@@ -287,5 +273,48 @@ def solving_part1(nb_of_steps, my_dict, current_step):
 
     return (sum(total_sum_of_NRJ))
 
+# ----------------- Example 1 -----------------
+# Io : <x=-1, y=0, z=2>
+# Europa : <x=2, y=-10, z=-7>
+# Ganymede : <x=4, y=-8, z=8>
+# Callisto : <x=3, y=5, z=-1>
+
+input_ex = open("day_12/exday12.txt", "r").read().split("\n")[:-1]
+my_dict, current_step = initialize_exercise(input_ex)
+pprint(my_dict)
+
 total_sum_of_NRJ = solving_part1(10, my_dict, current_step)
+print(total_sum_of_NRJ)
+
+print("NEXT EXAMPLE")
+# ----------------- Example 2 -----------------
+# Io : <x=-8, y=-10, z=0>
+# Europa : <x=5, y=5, z=10>
+# Ganymede : <x=2, y=-7, z=3>
+# Callisto : <x=9, y=-8, z=-3>
+
+input_ex2 = open("day_12/ex2day12.txt", "r").read().split("\n")[:-1]
+my_dict, current_step = initialize_exercise(input_ex2)
+pprint(my_dict)
+
+# After 100 steps:
+# Io : pos=<x=  8, y=-12, z= -9>, vel=<x= -7, y=  3, z=  0>
+# Europa : pos=<x= 13, y= 16, z= -3>, vel=<x=  3, y=-11, z= -5>
+# Ganymede : pos=<x=-29, y=-11, z= -1>, vel=<x= -3, y=  7, z=  4>
+# Callisto : pos=<x= 16, y=-13, z= 23>, vel=<x=  7, y=  1, z=  1>
+
+total_sum_of_NRJ = solving_part1(100, my_dict, current_step)
+print(total_sum_of_NRJ)
+
+# ----------------- Real input -----------------
+# Io : <x=-15, y=1, z=4>
+# Europa : <x=1, y=-10, z=-8>
+# Ganymede : <x=-5, y=4, z=9>
+# Callisto : <x=4, y=6, z=-2>
+
+input_real = open("day_12/day12.txt", "r").read().split("\n")[:-1]
+my_dict, current_step = initialize_exercise(input_real)
+pprint(my_dict)
+
+total_sum_of_NRJ = solving_part1(1000, my_dict, current_step)
 print(total_sum_of_NRJ)
