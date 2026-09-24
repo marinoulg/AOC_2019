@@ -251,18 +251,41 @@ def next_step(my_dict,
 my_dict, current_step = initialize_exercise(input_ex)
 pprint(my_dict)
 
-# After 2 steps:
-# Io : pos=<x= 5, y=-3, z=-1>, vel=<x= 3, y=-2, z=-2>
-# Europa : pos=<x= 1, y=-2, z= 2>, vel=<x=-2, y= 5, z= 6>
-# Ganymede : pos=<x= 1, y=-4, z=-1>, vel=<x= 0, y= 3, z=-6>
-# Callisto : pos=<x= 1, y=-4, z= 2>, vel=<x=-1, y=-6, z= 2>
-my_dict, current_step = next_step(my_dict, current_step)
-pprint(my_dict)
+def solving_part1(nb_of_steps, my_dict, current_step):
+    # nb_of_steps = 10
+    for _ in range(nb_of_steps-1):
+        my_dict, current_step = next_step(my_dict, current_step)
 
-# After 3 steps:
-# Io : pos=<x= 5, y=-6, z=-1>, vel=<x= 0, y=-3, z= 0>
-# Europa : pos=<x= 0, y= 0, z= 6>, vel=<x=-1, y= 2, z= 4>
-# Ganymede :pos=<x= 2, y= 1, z=-5>, vel=<x= 1, y= 5, z=-4>
-# Callisto : pos=<x= 1, y=-8, z= 2>, vel=<x= 0, y=-4, z= 0>
-my_dict, current_step = next_step(my_dict, current_step)
-pprint(my_dict)
+    # After 10 steps:
+    # Io : pos=<x= 2, y= 1, z=-3>, vel=<x=-3, y=-2, z= 1>
+    # Europa : pos=<x= 1, y=-8, z= 0>, vel=<x=-1, y= 1, z= 3>
+    # Ganymede : pos=<x= 3, y=-6, z= 1>, vel=<x= 3, y= 2, z=-3>
+    # Callisto : pos=<x= 2, y= 0, z= 4>, vel=<x= 1, y=-1, z=-1>
+
+    # pprint(my_dict)
+    # print("-----")
+
+    total_sum_of_NRJ = []
+    for elem in my_dict:
+        # print(elem)
+
+        a,b,c = (my_dict[elem][current_step+1]["position"])
+        a, b, c = abs(a), abs(b), abs(c)
+        # A moon's potential energy is the sum of the absolute values of its x, y, and z position coordinates.
+        potential = sum([a,b,c])
+        # print("moon's potential energy:", potential)
+
+        d,e,f = (my_dict[elem][current_step+1]["velocity"])
+        d,e,f = abs(d), abs(e), abs(f)
+        # A moon's kinetic energy is the sum of the absolute values of its velocity coordinates.
+        kinetic = sum([d,e,f])
+        # print("moon's kinetic energy:", kinetic)
+
+        # The total energy for a single moon is its potential energy multiplied by its kinetic energy.
+        print(f"Total energy of moon {elem}:", potential*kinetic, end="\n")
+        total_sum_of_NRJ.append(potential*kinetic)
+
+    return (sum(total_sum_of_NRJ))
+
+total_sum_of_NRJ = solving_part1(10, my_dict, current_step)
+print(total_sum_of_NRJ)
