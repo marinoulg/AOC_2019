@@ -33,15 +33,15 @@ def recursion(end, my_dict):
         if v == end:
             if "+" in k:
                 a,b = (k.split(" + "))
-                # return((a,b))
-                # (end)
-                for k,v in my_dict.items():
-                    if a and b in my_dict.values():
-                        return (a,b)
-                    elif a in my_dict.values():
-                        return (a)
-                    elif b in my_dict.values():
-                        return (b)
+                return((a,b))
+                # # (end)
+                # for k,v in my_dict.items():
+                #     if a and b in my_dict.values():
+                #         return (a,b)
+                #     elif a in my_dict.values():
+                #         return (a)
+                #     elif b in my_dict.values():
+                #         return (b)
 
 def do_recursion(end, my_dict):
     my_need = []
@@ -78,50 +78,14 @@ def find_total_ORE(my_dict, unit_quantity):
                 print((k,v))
                 u,q = (v.split(" "))
                 u = int(u)
-                print(k.split(" ORE"))
-                print("k",k)
-
-                # total_needed.append((round(unit_quantity[key] / u )*int(k)))
+                k,_ = (k.split(" ORE"))
+                total_needed.append((round(unit_quantity[key] / u )*int(k)))
 
     return(sum(total_needed))
 
 input_ex = open("day_14/exday14.txt", "r").read().split("\n")[:-1]
-# print(input_ex)
+print(input_ex)
 my_dict = create_my_dict(input_ex)
-pprint(my_dict)
-
 my_need = do_recursion(end="1 FUEL", my_dict=my_dict)
-print()
-print("my need:", my_need)
 unit_quantity = know_how_much_per_quantity(my_need)
-print("unit_quantity:", unit_quantity)
 print(find_total_ORE(my_dict, unit_quantity))
-
-# def if_blocked_recursion(my_dict, unit_quantity):
-#     unit_quantity_bis = {}
-#     for unit,quantity in unit_quantity.items():
-#         for i,k in enumerate(my_dict.values()):
-#             if unit in k:
-#                 l = (list(my_dict.keys()))
-#                 poss_unit, poss_quantity = (my_dict[l[i]]).split(" ")
-#                 # print(f"for {unit_quantity[poss_quantity]/int(poss_unit)} {poss_quantity} we need {unit_quantity[poss_quantity]}*({l[i]})")
-
-#                 for elem in (l[i].split(" + ")):
-#                     num, res_unit = elem.split(" ")
-#                     num = int(num)
-#                     res_quantity = unit_quantity[poss_quantity]*num
-#                     if res_unit not in unit_quantity_bis:
-#                         unit_quantity_bis[res_unit] = []
-
-#                     unit_quantity_bis[res_unit].append(res_quantity)
-
-#     for elem in unit_quantity_bis:
-#         unit_quantity_bis[elem] = sum(unit_quantity_bis[elem])
-
-#     return (unit_quantity_bis)
-
-# unit_quantity_bis = if_blocked_recursion(my_dict, unit_quantity)
-# pprint(unit_quantity_bis)
-
-# unit_quantity_bis = if_blocked_recursion(my_dict, unit_quantity_bis)
-# pprint(unit_quantity_bis)
