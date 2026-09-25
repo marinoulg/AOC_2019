@@ -1,6 +1,5 @@
 from pprint import pprint
 from fractions import Fraction
-import math
 
 # GOAL : Produce a list of the reactions the factory can perform that are relevant
 # to turn raw materials (your puzzle input) into fuel.
@@ -87,7 +86,7 @@ def find_total_ORE(my_dict, unit_quantity):
 
     return(sum(total_needed))
 
-input_ex = open("day_14/ex2day14.txt", "r").read().split("\n")[:-1]
+input_ex = open("day_14/ex1day14.txt", "r").read().split("\n")[:-1]
 
 print(input_ex)
 my_dict = create_my_dict(input_ex)
