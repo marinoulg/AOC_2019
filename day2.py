@@ -13,7 +13,7 @@
 # The three integers immediately after the opcode tell you these three positions -
 # the first two indicate the positions from which you should read the input values,
 # and the third indicates the position at which the output should be stored.
-# For example, if your Intcode computer encounters 1,10,20,30, it should read the
+# For example, if your Intcode computer encounters ```1,10,20,30````, it should read the
 # values at positions 10 and 20, add those values, and then overwrite the value
 # at position 30 with their sum.
 
