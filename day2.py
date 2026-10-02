@@ -52,7 +52,6 @@ def opcode1(elem, integers):
     integers.pop(pos3)
     integers.insert(pos3,res)
     # print(integers)
-    # print("first:", integers[0])
     by_4_list = update_by4_list(integers)
     return by_4_list
 
