@@ -46,6 +46,28 @@ def update_by4_list(integers):
     # print(by_4_list)
     return by_4_list
 
+def opcode1(elem, integers):
+    pos1, pos2, pos3 = elem[1], elem[2], elem[3]
+    res = integers[pos1] + integers[pos2]
+    integers.pop(pos3)
+    integers.insert(pos3,res)
+    # print(integers)
+    # print("first:", integers[0])
+    by_4_list = update_by4_list(integers)
+    return by_4_list
+
+def opcode2(elem, integers):
+    # multiplication
+    # print("opcode", opcode)
+    pos1, pos2, pos3 = elem[1], elem[2], elem[3]
+    res = integers[pos1] * integers[pos2]
+    integers.pop(pos3)
+    integers.insert(pos3,res)
+    # print(integers)
+    # print("first:", integers[0])
+    by_4_list = update_by4_list(integers)
+    return by_4_list
+
 def getpart1(ex1):
     integers = getstarted(ex1)
     # print(integers)
@@ -56,85 +78,71 @@ def getpart1(ex1):
         # print()
         for elem in by_4_list[l:]:
             # print(by_4_list[l:])
+            print("elem:", elem)
             opcode = (elem[0])
             if opcode == 1:
-                # print("opcode", opcode)
-                pos1, pos2, pos3 = elem[1], elem[2], elem[3]
-                res = integers[pos1] + integers[pos2]
-                integers.pop(pos3)
-                integers.insert(pos3,res)
-                # print(integers)
-                # print("first:", integers[0])
-                by_4_list = update_by4_list(integers)
+                by_4_list = opcode1(elem, integers)
                 break
             if opcode == 2:
-                    # multiplication
-                    # print("opcode", opcode)
-                    pos1, pos2, pos3 = elem[1], elem[2], elem[3]
-                    res = integers[pos1] * integers[pos2]
-                    integers.pop(pos3)
-                    integers.insert(pos3,res)
-                    # print(integers)
-                    # print("first:", integers[0])
-                    by_4_list = update_by4_list(integers)
-                    break
+                by_4_list = opcode2(elem, integers)
+                break
             if opcode == 99:
-                # print(integers)
-                # print("first:", integers[0])
                 by_4_list = update_by4_list(integers)
                 break
             else:
                 # print("Error")
                 break
+    print("integers:", integers)
     return(integers)
 
 
 # --------------------- PART 1 ---------------------
-def part1():
-    input = open("day_2/exday2.txt", "r").read().split("\n")
-    ex1 = input[0].split(",")
-    ex2 = input[1].split(",")
-    ex3 = input[2].split(",")
-    ex4 = input[3].split(",")
-    ex5 = input[4].split(",")
-    ex6 = input[5].split(",")
+def part1(only_answer=False, only_example=False):
+    if only_example == True:
+        input = open("day_2/exday2.txt", "r").read().split("\n")
+        ex1 = input[0].split(",")
+        ex2 = input[1].split(",")
+        ex3 = input[2].split(",")
+        ex4 = input[3].split(",")
+        ex5 = input[4].split(",")
+        ex6 = input[5].split(",")
 
-    print("...........")
-    print()
-    print("Ex1", getpart1(ex1))
-    print("...........")
-    print()
-    print("Ex2",getpart1(ex2))
-    print("...........")
-    print()
-    print("Ex3",getpart1(ex3))
-    print("...........")
-    print()
-    print("Ex4",getpart1(ex4))
-    print("...........")
-    print()
-    print("Ex5",getpart1(ex5))
-    print()
-    print("Ex6",getpart1(ex6))
+        print("...........")
+        print()
+        print("Ex1", getpart1(ex1))
+        print("...........")
+        print()
+        print("Ex2",getpart1(ex2))
+        print("...........")
+        print()
+        print("Ex3",getpart1(ex3))
+        print("...........")
+        print()
+        print("Ex4",getpart1(ex4))
+        print("...........")
+        print()
+        print("Ex5",getpart1(ex5))
+        print()
+        print("Ex6",getpart1(ex6))
 
-    print("----------------------------------------------------")
-    # # --------------------------
+        print("----------------------------------------------------")
 
-    # on real input
-    input = open("day_2/day2.txt", "r").read().split(",")
-    print()
-    # To do this, before running the program,
-    # replace position 1 with the value 12 and
-    input.pop(1)
-    input.insert(1,12)
-    # replace position 2 with the value 2.
-    input.pop(2)
-    input.insert(2,2)
-    # What value is left at position 0 after the program halts
-    # print("List to deal with", integers)
-    # print("------")
+    if only_answer == True:
+        # on real input
+        input = open("day_2/day2.txt", "r").read().split(",")
+        print()
+        # To do this, before running the program,
+        # replace position 1 with the value 12 and
+        input.pop(1)
+        input.insert(1,12)
+        # replace position 2 with the value 2.
+        input.pop(2)
+        input.insert(2,2)
+        # What value is left at position 0 after the program halts
+        # print("List to deal with", integers)
+        # print("------")
 
-    print(getpart1(input))
+        print(getpart1(input))
 
 # --------------------- PART 2 ---------------------
 # answer we are looking for
@@ -175,18 +183,18 @@ def get_noun_verb(input, answer):
             if getpart1(input)[0] == answer:
                 return(add1, add2)
 
-def final_answer_part2(input, noun, verb):
+def final_answer_part2(noun, verb):
     return 100*noun + verb
 
-def part2():
-    input = open("day_2/day2.txt", "r").read().split(",")
-    answer = 19690720
-    integers = getstarted(input)
-    by_4_list = update_by4_list(integers)
+def part2(input, answer):
     (add1, add2) = get_noun_verb(input, answer)
-    return (final_answer_part2(input, noun=add1, verb=add2))
+    return (final_answer_part2(noun=add1, verb=add2))
 
 if __name__=='__main__':
-    print(part1())
-    print()
-    print(part2())
+    print(part1(only_example=True))
+
+    # print()
+
+    # input = open("day_2/day2.txt", "r").read().split(",")
+    # answer = 19690720
+    # print(part2(input, answer))
