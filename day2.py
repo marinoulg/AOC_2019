@@ -58,7 +58,6 @@ def opcode1(elem, integers):
 
 def opcode2(elem, integers):
     # multiplication
-    # print("opcode", opcode)
     pos1, pos2, pos3 = elem[1], elem[2], elem[3]
     res = integers[pos1] * integers[pos2]
     integers.pop(pos3)
