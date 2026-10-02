@@ -46,23 +46,66 @@ def update_by4_list(integers):
     # print(by_4_list)
     return by_4_list
 
-def opcode1(elem, integers):
-    pos1, pos2, pos3 = elem[1], elem[2], elem[3]
-    res = integers[pos1] + integers[pos2]
-    integers.pop(pos3)
-    integers.insert(pos3,res)
-    # print(integers)
+def opcode1(elem, integers,
+            parameter_mode=0):
+    if parameter_mode == 0:
+        pos1, pos2, pos3 = elem[1], elem[2], elem[3]
+        res = integers[pos1] + integers[pos2]
+        integers.pop(pos3)
+        integers.insert(pos3,res)
+        # print(integers)
     by_4_list = update_by4_list(integers)
     return by_4_list
 
-def opcode2(elem, integers):
+def opcode2(elem, integers,
+            parameter_modes = [0,0,0]):
+
     # multiplication
+    parameter_mode_pos1, parameter_mode_pos2, parameter_mode_pos3 = parameter_modes
     pos1, pos2, pos3 = elem[1], elem[2], elem[3]
-    res = integers[pos1] * integers[pos2]
-    integers.pop(pos3)
-    integers.insert(pos3,res)
+
+    if parameter_mode_pos1 == 0:
+        if parameter_mode_pos2 == 0:
+            if parameter_mode_pos3 == 0:
+                res = integers[pos1] * integers[pos2]
+                integers.pop(pos3)
+                integers.insert(pos3,res)
+
+            elif parameter_mode_pos3 == 1:
+                res = integers[pos1] * integers[pos2]
+                integers.pop(pos3)
+                integers.insert(pos3,res)
+
+        elif parameter_mode_pos2 == 1:
+            if parameter_mode_pos3 == 0:
+                pos3 = elem[3]
+                res = integers[pos1] * int(pos2)
+                integers.pop(pos3)
+                integers.insert(pos3,res)
+            elif parameter_mode_pos3 == 1:
+                pass
+
+    elif parameter_mode_pos1 == 1:
+        if parameter_mode_pos2 == 0:
+            if parameter_mode_pos3 == 0:
+                res = int(pos1) * integers[pos2]
+                integers.pop(pos3)
+                integers.insert(pos3,res)
+            elif parameter_mode_pos3 == 1:
+                pass
+
+        elif parameter_mode_pos2 == 1:
+            if parameter_mode_pos3 == 0:
+                res = int(pos1) * int(pos2)
+                integers.pop(pos3)
+                integers.insert(pos3,res)
+            elif parameter_mode_pos3 == 1:
+                pass
+
+
     # print(integers)
     # print("first:", integers[0])
+
     by_4_list = update_by4_list(integers)
     return by_4_list
 
