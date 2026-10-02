@@ -64,127 +64,126 @@ def getpart1(ex1):
     for l in range(len(by_4_list)):
         # print()
         for elem in by_4_list[l:]:
-            print(by_4_list[l:])
+            # print(by_4_list[l:])
             opcode = (elem[0])
             if opcode == 1:
-                print("opcode", opcode, end = "; ")
+                # print("opcode", opcode)
                 pos1, pos2, pos3 = elem[1], elem[2], elem[3]
-                # print(pos1, pos2, pos3 )
                 res = integers[pos1] + integers[pos2]
                 integers.pop(pos3)
                 integers.insert(pos3,res)
                 # print(integers)
-                print("first:", integers[0])
+                # print("first:", integers[0])
                 by_4_list = update_by4_list(integers)
                 break
             if opcode == 2:
                     # multiplication
-                    print("opcode", opcode, end = "; ")
+                    # print("opcode", opcode)
                     pos1, pos2, pos3 = elem[1], elem[2], elem[3]
                     res = integers[pos1] * integers[pos2]
                     integers.pop(pos3)
                     integers.insert(pos3,res)
                     # print(integers)
-                    print("first:", integers[0])
+                    # print("first:", integers[0])
                     by_4_list = update_by4_list(integers)
                     break
             if opcode == 99:
                 # print(integers)
-                print("first:", integers[0])
+                # print("first:", integers[0])
                 by_4_list = update_by4_list(integers)
                 break
             else:
+                # print("Error")
                 break
     return(integers)
 
 
-# print("...........")
-# print()
-# print("Ex1", getpart1(ex1))
-# print("...........")
-# print()
-# print("Ex2",getpart1(ex2))
-# print("...........")
-# print()
-# print("Ex3",getpart1(ex3))
-# print("...........")
-# print()
-# print("Ex4",getpart1(ex4))
-# print("...........")
-# print()
-# print("Ex5",getpart1(ex5))
-# print()
-# print("Ex6",getpart1(ex6))
+# --------------------- PART 1 ---------------------
+def part1():
+    print("...........")
+    print()
+    print("Ex1", getpart1(ex1))
+    print("...........")
+    print()
+    print("Ex2",getpart1(ex2))
+    print("...........")
+    print()
+    print("Ex3",getpart1(ex3))
+    print("...........")
+    print()
+    print("Ex4",getpart1(ex4))
+    print("...........")
+    print()
+    print("Ex5",getpart1(ex5))
+    print()
+    print("Ex6",getpart1(ex6))
 
-# print("----------------------------------------------------")
-# --------------------------
+    print("----------------------------------------------------")
+    # # --------------------------
+
+    # on real input
+    input = open("day_2/day2.txt", "r").read().split(",")
+    print()
+    # To do this, before running the program,
+    # replace position 1 with the value 12 and
+    input.pop(1)
+    input.insert(1,12)
+    # replace position 2 with the value 2.
+    input.pop(2)
+    input.insert(2,2)
+    # What value is left at position 0 after the program halts
+    # print("List to deal with", integers)
+    # print("------")
+
+    print(getpart1(input))
+
+# --------------------- PART 2 ---------------------
+# answer we are looking for
 
 
-# on real input
-# input = open("day_2/day2.txt", "r").read().split(",")
-# print()
-# # To do this, before running the program,
-# # replace position 1 with the value 12 and
-# input.pop(1)
-# input.insert(1,12)
-# # replace position 2 with the value 2.
-# input.pop(2)
-# input.insert(2,2)
-# # What value is left at position 0 after the program halts
-# # print("List to deal with", integers)
-# # print("------")
+# In Part 1, you were told to manually change two numbers before running the program:
+# The number at address 1 became 12 (this is your noun).
+# The number at address 2 became 2 (this is your verb).
+# In Part 2, the puzzle input values for address 1 and address 2 are no longer fixed.
+# You are told that both the noun and the verb can be any integer from 0 to 99.
 
-# print(getpart1(input)[0])
+# Instead of calculating the output for a specific noun and verb, you are given the target output: 19690720.
+# Your mission is to brute-force or loop through combinations of nouns and verbs
+# (from 0 to 99 for each) until you find the exact pair that causes address 0
+# to equal 19690720 when the program halts.
 
-# -------------- Part 2 --------------
-# When you run an Intcode program, make sure to start by initializing memory to
-# the program's values.
-# A position in memory is called an address
-# (for example, the first value in memory is at "address 0").
+input = open("day_2/day2.txt", "r").read().split(",")
 
-# Opcodes (like 1, 2, or 99) mark the beginning of an instruction.
-# The values used immediately after an opcode, if any, are called the instruction's parameters.
-# For example, in the instruction ```1,2,3,4````, 1 is the opcode; 2, 3, and 4 are the parameters.
-# The instruction 99 contains only an opcode and has no parameters.
+# length is > 99, hence any number between 0 and 99 is possible
+# print(len(integers), end="\n\n")
 
-# The address of the current instruction is called the instruction pointer;
-# it starts at 0.
-# After an instruction finishes, the instruction pointer increases by
-# the number of values in the instruction;
-# until you add more instructions to the computer, this is always 4
-# (1 opcode + 3 parameters) for the add and multiply instructions.
-# (The halt instruction would increase the instruction pointer by 1,
-# but it halts the program instead.)
 
-# In this program, the value placed in address 1 is called the noun,
-# and the value placed in address 2 is called the verb.
-# Each of the two input values will be between 0 and 99, inclusive.
+def replacing(input, add1, add2):
+    input.pop(1)
+    input.insert(1,add1)
+    input.pop(2)
+    input.insert(2,add2)
+    return input
 
-# Once the program has halted, its output is available at address 0, also just like before.
-# Each time you try a pair of inputs, make sure you first reset the computer's
-# memory to the values in the program (your puzzle input) -
-# in other words, don't reuse memory from a previous attempt.
+def get_noun_verb(input, answer):
+    # add1: noun
+    # add2: verb
+    addresses = {}
+    for add1 in range(100):
+        for add2 in range(100):
+            input_2 = replacing(input, add1, add2)
+            addresses[getpart1(input)[0]] = [add1, add2]
+            if getpart1(input)[0] == answer:
+                return(add1, add2)
 
-# Find the input noun and verb that cause the program to produce the output 19690720.
-# What is 100 * noun + verb?
-# (For example, if noun=12 and verb=2, the answer would be 1202.)
+def final_answer_part2(input, noun, verb):
+    return 100*noun + verb
 
-# print(end="\n\n\n")
+def part2(input, answer):
+    integers = getstarted(input)
+    by_4_list = update_by4_list(integers)
+    (add1, add2) = get_noun_verb(input, answer)
+    return (final_answer_part2(input, noun=add1, verb=add2))
 
-input = open("day_2/exbasicday2.txt", "r").read().split(",")
-
-integers = getstarted(input)
-print(integers)
-print()
-# To do this, before running the program,
-# replace position 1 with the value 12 and
-input.pop(1)
-input.insert(1,12)
-# replace position 2 with the value 2.
-input.pop(2)
-input.insert(2,2)
-# What value is left at position 0 after the program halts
-# print("List to deal with", integers)
-# print("------")
-
-print(getpart1(input))
+answer = 19690720
+print(part2(input, answer))
