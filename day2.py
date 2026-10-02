@@ -23,15 +23,6 @@
 
 # Once you're done processing an opcode, move to the next one by stepping forward 4 positions.
 
-
-input = open("day_2/exday2.txt", "r").read().split("\n")
-ex1 = input[0].split(",")
-ex2 = input[1].split(",")
-ex3 = input[2].split(",")
-ex4 = input[3].split(",")
-ex5 = input[4].split(",")
-ex6 = input[5].split(",")
-
 # print(ex1)
 def getstarted(ex1):
     integers = []
@@ -100,6 +91,14 @@ def getpart1(ex1):
 
 # --------------------- PART 1 ---------------------
 def part1():
+    input = open("day_2/exday2.txt", "r").read().split("\n")
+    ex1 = input[0].split(",")
+    ex2 = input[1].split(",")
+    ex3 = input[2].split(",")
+    ex4 = input[3].split(",")
+    ex5 = input[4].split(",")
+    ex6 = input[5].split(",")
+
     print("...........")
     print()
     print("Ex1", getpart1(ex1))
@@ -152,7 +151,7 @@ def part1():
 # (from 0 to 99 for each) until you find the exact pair that causes address 0
 # to equal 19690720 when the program halts.
 
-input = open("day_2/day2.txt", "r").read().split(",")
+#
 
 # length is > 99, hence any number between 0 and 99 is possible
 # print(len(integers), end="\n\n")
@@ -179,11 +178,15 @@ def get_noun_verb(input, answer):
 def final_answer_part2(input, noun, verb):
     return 100*noun + verb
 
-def part2(input, answer):
+def part2():
+    input = open("day_2/day2.txt", "r").read().split(",")
+    answer = 19690720
     integers = getstarted(input)
     by_4_list = update_by4_list(integers)
     (add1, add2) = get_noun_verb(input, answer)
     return (final_answer_part2(input, noun=add1, verb=add2))
 
-answer = 19690720
-print(part2(input, answer))
+if __name__=='__main__':
+    print(part1())
+    print()
+    print(part2())
