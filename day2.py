@@ -47,18 +47,94 @@ def update_by4_list(integers):
     return by_4_list
 
 def opcode1(elem, integers,
-            parameter_mode=0):
-    if parameter_mode == 0:
-        pos1, pos2, pos3 = elem[1], elem[2], elem[3]
-        res = integers[pos1] + integers[pos2]
-        integers.pop(pos3)
-        integers.insert(pos3,res)
-        # print(integers)
+            parameter_modes = [0,0,0]):
+    # --------------------------------
+    """
+    Added for day 5
+    """
+
+    # Parameter modes:
+    # Each parameter of an instruction is handled based on its parameter mode.
+
+    # parameter mode 0 = position mode,
+    # which causes the parameter to be interpreted as a position -
+    # if the parameter is 50, its value is the value stored at address 50 in memory.
+    # Until now, all parameters have been in position mode.
+
+    # parameter mode 1 = immediate mode.
+    # In immediate mode, a parameter is interpreted as a value -
+    # if the parameter is 50, its value is simply 50.
+
+    # --------------------------------
+    parameter_mode_pos1, parameter_mode_pos2, parameter_mode_pos3 = parameter_modes
+    pos1, pos2, pos3 = elem[1], elem[2], elem[3]
+
+    if parameter_mode_pos1 == 0:
+        if parameter_mode_pos2 == 0:
+            if parameter_mode_pos3 == 0:
+                res = integers[pos1] + integers[pos2]
+                integers.pop(pos3)
+                integers.insert(pos3,res)
+            elif parameter_mode_pos3 == 1:
+                res = integers[pos1] + integers[pos2]
+                integers.pop(pos3)
+                integers.insert(pos3,res)
+
+        elif parameter_mode_pos2 == 1:
+            if parameter_mode_pos3 == 0:
+                pos3 = elem[3]
+                res = integers[pos1] + int(pos2)
+                integers.pop(pos3)
+                integers.insert(pos3,res)
+            elif parameter_mode_pos3 == 1:
+                res = int(pos1) + int(pos2)
+                integers.pop(pos3)
+                integers.insert(pos3,pos3)
+
+    elif parameter_mode_pos1 == 1:
+        if parameter_mode_pos2 == 0:
+            if parameter_mode_pos3 == 0:
+                res = int(pos1) + integers[pos2]
+                integers.pop(pos3)
+                integers.insert(pos3,res)
+            elif parameter_mode_pos3 == 1:
+                res = int(pos1) + integers[pos2]
+                integers.pop(pos3)
+                integers.insert(pos3,pos3)
+
+        elif parameter_mode_pos2 == 1:
+            if parameter_mode_pos3 == 0:
+                res = int(pos1) + int(pos2)
+                integers.pop(pos3)
+                integers.insert(pos3,res)
+            elif parameter_mode_pos3 == 1:
+                integers.pop(pos3)
+                integers.insert(pos3,pos3)
+
     by_4_list = update_by4_list(integers)
     return by_4_list
 
 def opcode2(elem, integers,
             parameter_modes = [0,0,0]):
+
+    # --------------------------------
+    """
+    Added for day 5
+    """
+
+    # Parameter modes:
+    # Each parameter of an instruction is handled based on its parameter mode.
+
+    # parameter mode 0 = position mode,
+    # which causes the parameter to be interpreted as a position -
+    # if the parameter is 50, its value is the value stored at address 50 in memory.
+    # Until now, all parameters have been in position mode.
+
+    # parameter mode 1 = immediate mode.
+    # In immediate mode, a parameter is interpreted as a value -
+    # if the parameter is 50, its value is simply 50.
+
+    # --------------------------------
 
     # multiplication
     parameter_mode_pos1, parameter_mode_pos2, parameter_mode_pos3 = parameter_modes
@@ -83,7 +159,8 @@ def opcode2(elem, integers,
                 integers.pop(pos3)
                 integers.insert(pos3,res)
             elif parameter_mode_pos3 == 1:
-                pass
+                integers.pop(pos3)
+                integers.insert(pos3,pos3)
 
     elif parameter_mode_pos1 == 1:
         if parameter_mode_pos2 == 0:
@@ -92,7 +169,8 @@ def opcode2(elem, integers,
                 integers.pop(pos3)
                 integers.insert(pos3,res)
             elif parameter_mode_pos3 == 1:
-                pass
+                integers.pop(pos3)
+                integers.insert(pos3,pos3)
 
         elif parameter_mode_pos2 == 1:
             if parameter_mode_pos3 == 0:
@@ -100,7 +178,8 @@ def opcode2(elem, integers,
                 integers.pop(pos3)
                 integers.insert(pos3,res)
             elif parameter_mode_pos3 == 1:
-                pass
+                integers.pop(pos3)
+                integers.insert(pos3,pos3)
 
 
     # print(integers)
@@ -138,7 +217,14 @@ def getpart1(ex1):
 
 
 # --------------------- PART 1 ---------------------
-def part1(only_answer=False, only_example=False):
+def part1(only_answer=False,
+          only_example=False,
+          only_ex1=False):
+    if only_ex1:
+        input = open("day_2/exday2.txt", "r").read().split("\n")
+        ex1 = input[0].split(",")
+        print("Ex1", getpart1(ex1))
+
     if only_example == True:
         input = open("day_2/exday2.txt", "r").read().split("\n")
         ex1 = input[0].split(",")
